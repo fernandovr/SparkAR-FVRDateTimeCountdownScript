@@ -1,4 +1,4 @@
-# SparkAR-FVRDateTimeCountdownScript
+# Spark AR - FVR Date Time Countdown Script
 Timer and Countdown script developed by Fernando VR (instagram.com/laikezando)
 
 Inputs and outputs configurations:
