@@ -32,3 +32,8 @@ Inputs and outputs configurations:
 * countdowntime = Text (Use time in HH-MM-SS format (Hours-Minutes-Seconds, Ex.: 23:35:56))
 * countdownenable = Boolean (Activate this option after configuring the above two steps of date and time, and want to activate the time remaining counter.)
 * langselect = Text (Select your preferred language (pt - Portuguese, en - English, es - Spanish and fr - French))
+
+## Donations
+If these are useful for you, please consider a donation🙏🏼. One-time donations can be made with PayPal.
+
+[![](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=XT8NB25M26Q92)
