@@ -1,7 +1,11 @@
 # Spark AR - FVR Date Time Countdown Script
 Timer and Countdown script developed by Fernando VR ([@laikezando](https://www.instagram.com/laikezando/))
 
-Inputs and outputs configurations:
+If you don't want to go through the trouble of configuring the entire script process, you can purchase 2 blocks that I created and made available for purchase on gumroad via the link below.
+
+https://laikezando.gumroad.com/l/TimerAndCountdown
+
+And if you want to configure the script yourself, use the input and output data below:
 
 ## FROM SCRIPT ##
 * date = Number
