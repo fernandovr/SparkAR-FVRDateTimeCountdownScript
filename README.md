@@ -29,6 +29,10 @@ And if you want to configure the script yourself, use the input and output data 
 * fulldate = Text
 * fulltime = Text
 * fullcountdown = Text
+* legenddays = Text
+* legendhours = Text
+* legendminutes = Text
+* legendseconds = Text
 
 ## TO SCRIPT ##
 * keepUpdate = Boolean (With this option on, you keep the script constantly updated.)
