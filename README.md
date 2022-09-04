@@ -24,6 +24,7 @@ And if you want to configure the script yourself, use the input and output data 
 * cdminutes = Number
 * cdseconds = Number
 * countdownstatus = Text
+* countdownstate = Number
 * monthtext = Text
 * fulldate = Text
 * fulltime = Text
@@ -34,6 +35,9 @@ And if you want to configure the script yourself, use the input and output data 
 * updateNow = Pulse (If keepUpdate is off the script will only update when it receives a pulse signal in this option.)
 * countdowndate = Text (Use dates in YYYY-MM-DD format (Year-Month-Day, ex: 2022-12-25))
 * countdowntime = Text (Use time in HH-MM-SS format (Hours-Minutes-Seconds, Ex.: 23:35:56))
+* countdownonlydays = Boolean (Activate this option if you want only the days to be counted, ignoring the time.)
+* countdownenddate = Text (Use dates in YYYY-MM-DD format (Year-Month-Day, ex: 2022-12-25))
+* countdownendtime = Text (Use time in HH-MM-SS format (Hours-Minutes-Seconds, Ex.: 23:35:56))
 * countdownenable = Boolean (Activate this option after configuring the above two steps of date and time, and want to activate the time remaining counter.)
 * langselect = Text (Select your preferred language (pt - Portuguese, en - English, es - Spanish and fr - French))
 
