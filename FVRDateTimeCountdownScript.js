@@ -20,6 +20,7 @@
 * - cdminutes = Number
 * - cdseconds = Number
 * - countdownstatus = Text
+* - countdownstate = Number
 * - monthtext = Text
 * - fulldate = Text
 * - fulltime = Text
@@ -30,6 +31,9 @@
 * - updateNow = Pulse (If keepUpdate is off the script will only update when it receives a pulse signal in this option.)
 * - countdowndate = Text (Use dates in YYYY-MM-DD format (Year-Month-Day, ex: 2022-12-25))
 * - countdowntime = Text (Use time in HH-MM-SS format (Hours-Minutes-Seconds, Ex.: 23:35:56))
+* - countdownonlydays = Boolean (Activate this option if you want only the days to be counted, ignoring the time.)
+* - countdownenddate = Text (Use dates in YYYY-MM-DD format (Year-Month-Day, ex: 2022-12-25))
+* - countdownendtime = Text (Use time in HH-MM-SS format (Hours-Minutes-Seconds, Ex.: 23:35:56))
 * - countdownenable = Boolean (Activate this option after configuring the above two steps of date and time, and want to activate the time remaining counter.)
 * - langselect = Text (Select your preferred language (pt - Portuguese, en - English, es - Spanish and fr - French))
 */
@@ -43,9 +47,13 @@ export const D = require('Diagnostics');
 //var autolang = '';
 var _keepUpdate = false;
 var _countdown = false;
-var _countdowndate = '9999-12-31';
+var _countdowndate = '9999-01-10';
 var _countdowntime = '00:00:00';
 var _countdowndatetime = _countdowndate + 'T' + _countdowntime;
+var _countdownenddate = '9999-01-10';
+var _countdownendtime = '00:00:00';
+var _countdownenddatetime = _countdownenddate + 'T' + _countdownendtime;
+var _countdowonlydays = false;
 var dayOfWeek = [];
 var monthText = [];
 const calcsecond = 1000;
@@ -90,21 +98,53 @@ export class FVRDateTime {
 				_countdown = values.newValue;
 				if (_countdown == false) {
 					Patches.inputs.setString('countdownstatus', 'DISABLED');
+					Patches.inputs.setScalar('countdownstate', 0);
 				}
 			});
 		});
-
+		
 		Patches.outputs.getString('countdowndate').then(event => {
 			event.monitor({ fireOnInitialValue: true }).subscribe(function (values) {
 				_countdowndate = values.newValue;
-				self.setCountDown(_countdowndate + 'T' + _countdowntime);
+				if (_countdowonlydays == false) {
+					self.setCountDown(_countdowndate + 'T' + _countdowntime);
+				} else {
+					self.setCountDown(_countdowndate + 'T00:00:00');
+				}
 			});
 		});
 
 		Patches.outputs.getString('countdowntime').then(event => {
 			event.monitor({ fireOnInitialValue: true }).subscribe(function (values) {
 				_countdowntime = values.newValue;
-				self.setCountDown(_countdowndate + 'T' + _countdowntime);
+				if (_countdowonlydays == false) {
+					self.setCountDown(_countdowndate + 'T' + _countdowntime);
+				}
+			});
+		});
+		
+		Patches.outputs.getBoolean('countdownonlydays').then(event => {
+			event.monitor({ fireOnInitialValue: true }).subscribe(function (values) {
+				_countdowonlydays = values.newValue;
+				if (_countdowonlydays == true) {
+					self.setCountDown(_countdowndate + 'T00:00:00');
+				} else {
+					self.setCountDown(_countdowndate + 'T' + _countdowntime);
+				}
+			});
+		});
+		
+		Patches.outputs.getString('countdownenddate').then(event => {
+			event.monitor({ fireOnInitialValue: true }).subscribe(function (values) {
+				_countdownenddate = values.newValue;
+				self.setCountDownEnd(_countdownenddate + 'T' + _countdownendtime);
+			});
+		});
+
+		Patches.outputs.getString('countdownendtime').then(event => {
+			event.monitor({ fireOnInitialValue: true }).subscribe(function (values) {
+				_countdownendtime = values.newValue;
+				self.setCountDownEnd(_countdownenddate + 'T' + _countdownendtime);
 			});
 		});
 
@@ -160,25 +200,62 @@ export class FVRDateTime {
 	setCountDown(datetime) {
 		_countdowndatetime = new Date(datetime);
 	}
+	
+	setCountDownEnd(datetime) {
+		_countdownenddatetime = new Date(datetime);
+	}
 
 	getCountDown(nowTime) {
 		let countdowndistance = _countdowndatetime.getTime() - nowTime;
-
-		let countdowndays = Math.floor(countdowndistance / calcday);
-		let countdownhours = Math.floor((countdowndistance % calcday) / calchour);
-		let countdownminutes = Math.floor((countdowndistance % calchour) / calcminute);
-		let countdownseconds = Math.floor((countdowndistance % calcminute) / calcsecond);
-
-		if (countdowndistance < 0) {
-			Patches.inputs.setString('countdownstatus', 'EXPIRED');
-		} else {
+		let countdownenddistance = _countdownenddatetime.getTime() - nowTime;
+		let countdowndays = 0;
+		let countdownhours = 0;
+		let countdownminutes = 0;
+		let countdownseconds = 0;
+		let countdownfull = '000';
+		
+		if (countdowndistance > 0) {
 			Patches.inputs.setString('countdownstatus', 'ENABLED');
-			Patches.inputs.setScalar('cddays', countdowndays);
-			Patches.inputs.setScalar('cdhours', countdownhours);
-			Patches.inputs.setScalar('cdminutes', countdownminutes);
-			Patches.inputs.setScalar('cdseconds', countdownseconds);
-			Patches.inputs.setString('fullcountdown', this.zeroPad(countdowndays, 3) + ' : ' + this.zeroPad(countdownhours, 2) + ' : ' + this.zeroPad(countdownminutes, 2) + ' : ' + this.zeroPad(countdownseconds, 2));
-		}
+			Patches.inputs.setScalar('countdownstate', 1);
+			countdowndays = this.calcDays(countdowndistance, _countdowonlydays);
+			countdownhours = this.calcHours(countdowndistance, _countdowonlydays);
+			countdownminutes = this.calcMinutes(countdowndistance, _countdowonlydays);
+			countdownseconds = this.calcSeconds(countdowndistance, _countdowonlydays);
+			countdownfull = this.getCountDownFull(countdowndays, countdownhours, countdownminutes, countdownseconds, _countdowonlydays);
+		} else if (countdownenddistance > 0) {
+			Patches.inputs.setString('countdownstatus', 'EXPIRED');
+			Patches.inputs.setScalar('countdownstate', 2);
+		} else {
+			Patches.inputs.setString('countdownstatus', 'FINISHED');
+			Patches.inputs.setScalar('countdownstate', 3);
+		}	
+		
+		Patches.inputs.setScalar('cddays', countdowndays);
+		Patches.inputs.setScalar('cdhours', countdownhours);
+		Patches.inputs.setScalar('cdminutes', countdownminutes);
+		Patches.inputs.setScalar('cdseconds', countdownseconds);
+		Patches.inputs.setString('fullcountdown', countdownfull);
+	}
+	
+	calcDays(distance, onlyDaysActivated) {
+		let distanceday = distance / calcday;
+		return onlyDaysActivated ? Math.ceil(distanceday) : Math.floor(distanceday);
+	}
+	
+	calcHours(distance, onlyDaysActivated) {
+		return onlyDaysActivated ? 0 : Math.floor((distance % calcday) / calchour);
+	}
+	
+	calcMinutes(distance, onlyDaysActivated) {
+		return onlyDaysActivated ? 0 : Math.floor((distance % calchour) / calcminute)
+	}
+	
+	calcSeconds(distance, onlyDaysActivated) {
+		return onlyDaysActivated ? 0 : Math.floor((distance % calcminute) / calcsecond);
+	}
+	
+	getCountDownFull(days, hours, minutes, seconds, onlyDaysActivated) {
+		return onlyDaysActivated ? this.zeroPad(days, 3) : this.zeroPad(days, 3) + ' : ' + this.zeroPad(hours, 2) + ' : ' + this.zeroPad(minutes, 2) + ' : ' + this.zeroPad(seconds, 2); 
 	}
 
 	getLanguage(lang) {
