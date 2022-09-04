@@ -25,6 +25,10 @@
 * - fulldate = Text
 * - fulltime = Text
 * - fullcountdown = Text
+* - legenddays = Text
+* - legendhours = Text
+* - legendminutes = Text
+* - legendseconds = Text
 *
 * ## TO SCRIPT ##
 * - keepUpdate = Boolean (With this option on, you keep the script constantly updated.)
@@ -56,6 +60,7 @@ var _countdownenddatetime = _countdownenddate + 'T' + _countdownendtime;
 var _countdowonlydays = false;
 var dayOfWeek = [];
 var monthText = [];
+var legends = [];
 const calcsecond = 1000;
 const calcminute = calcsecond * 60;
 const calchour = calcminute * 60;
@@ -84,6 +89,10 @@ export class FVRDateTime {
 				// } else {
 				self.getLanguage(selectlang);
 				// }
+				Patches.inputs.setString('legenddays', legends[0]);
+				Patches.inputs.setString('legendhours', legends[1]);
+				Patches.inputs.setString('legendminutes', legends[2]);
+				Patches.inputs.setString('legendseconds', legends[3]);
 			});
 		});
 
@@ -153,7 +162,7 @@ export class FVRDateTime {
 				self.update();
 			});
 		});
-
+		
 		Time.ms.monitor().subscribe(() => {
 			if (_keepUpdate) {
 				this.update();
@@ -281,16 +290,20 @@ export class FVRDateTime {
 				monthText[9] = 'Outubro';
 				monthText[10] = 'Novembro';
 				monthText[11] = 'Dezembro';
+				legends[0] = 'Dias';
+				legends[1] = 'Horas';
+				legends[2] = 'Minutos';
+				legends[3] = 'Segundos';
 				break;
 			// Spanish
 			case 'es':
-				dayOfWeek[0] = 'domingo';
-				dayOfWeek[1] = 'lunes';
-				dayOfWeek[2] = 'martes';
-				dayOfWeek[3] = 'miércoles';
-				dayOfWeek[4] = 'jueves';
-				dayOfWeek[5] = 'viernes';
-				dayOfWeek[6] = 'sábado';
+				dayOfWeek[0] = 'Domingo';
+				dayOfWeek[1] = 'Lunes';
+				dayOfWeek[2] = 'Martes';
+				dayOfWeek[3] = 'Miércoles';
+				dayOfWeek[4] = 'Jueves';
+				dayOfWeek[5] = 'Viernes';
+				dayOfWeek[6] = 'Sábado';
 				monthText[0] = 'Enero';
 				monthText[1] = 'Febrero';
 				monthText[2] = 'Marzo';
@@ -303,16 +316,20 @@ export class FVRDateTime {
 				monthText[9] = 'Octubre';
 				monthText[10] = 'Noviembre';
 				monthText[11] = 'Diciembre';
+				legends[0] = 'Días';
+				legends[1] = 'Horas';
+				legends[2] = 'Minutos';
+				legends[3] = 'Segundos';
 				break;
 			// French
 			case 'fr':
-				dayOfWeek[0] = 'lundi';
-				dayOfWeek[1] = 'mardi';
-				dayOfWeek[2] = 'mercredi';
-				dayOfWeek[3] = 'jeudi';
-				dayOfWeek[4] = 'vendredi';
-				dayOfWeek[5] = 'samedi';
-				dayOfWeek[6] = 'dimanche';
+				dayOfWeek[0] = 'Lundi';
+				dayOfWeek[1] = 'Mardi';
+				dayOfWeek[2] = 'Mercredi';
+				dayOfWeek[3] = 'Jeudi';
+				dayOfWeek[4] = 'Vendredi';
+				dayOfWeek[5] = 'Samedi';
+				dayOfWeek[6] = 'Dimanche';
 				monthText[0] = 'Janvier';
 				monthText[1] = 'Février';
 				monthText[2] = 'Mars';
@@ -325,6 +342,10 @@ export class FVRDateTime {
 				monthText[9] = 'Octobre';
 				monthText[10] = 'Novembre';
 				monthText[11] = 'Décembre';
+				legends[0] = 'Jours';
+				legends[1] = 'Heures';
+				legends[2] = 'Minutes';
+				legends[3] = 'Secondes';
 				break;
 			// English
 			case 'en':
@@ -348,6 +369,10 @@ export class FVRDateTime {
 				monthText[9] = 'October';
 				monthText[10] = 'November';
 				monthText[11] = 'December';
+				legends[0] = 'Days';
+				legends[1] = 'Hours';
+				legends[2] = 'Minutes';
+				legends[3] = 'Seconds';
 				break;
 		}
 	}
