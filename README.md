@@ -48,4 +48,4 @@ And if you want to configure the script yourself, use the input and output data 
 ## Donations
 If these are useful for you, please consider a donation🙏🏼. One-time donations can be made with PayPal.
 
-[![](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=XT8NB25M26Q92)
+[![](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=TDSHTPU2V9LEJ)
