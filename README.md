@@ -5,7 +5,11 @@ If you don't want to go through the trouble of configuring the entire script pro
 
 https://laikezando.gumroad.com/l/TimerAndCountdown
 
-And if you want to configure the script yourself, use the input and output data below:
+With this script you can make filters displaying the current date and time on the screen, or countdown future dates.
+
+You can do as many things as your creativity allows. For example filters that modify each day of the week, or that are different for each month, and many other infinite possibilities involving dates.
+
+If you want to configure the script yourself, use the input and output data below:
 
 ## FROM SCRIPT ##
 * date = Number
