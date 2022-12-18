@@ -3,7 +3,7 @@ Timer and Countdown script developed by Fernando VR ([@laikezando](https://www.i
 
 If you don't want to go through the trouble of configuring the entire script process, you can purchase 2 blocks that I created and made available for purchase on gumroad via the link below.
 
-https://laikezando.gumroad.com/l/TimerAndCountdown
+https://laikezando.gumroad.com/
 
 With this script you can make filters displaying the current date and time on the screen, or countdown future dates.
 
